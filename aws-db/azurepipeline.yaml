@@ -1,0 +1,26 @@
+pool: default  
+
+trigger:
+- main  
+
+variables:
+- group: aws-terra-varibles  
+
+jobs:
+  - job: TerraformJob
+    steps:
+      - script: |
+          cd aws-db
+          terraform init
+        displayName: 'terraform init'
+      - script: |
+          cd aws-db
+          terraform plan
+          displayname: "terraform plan"
+      - script: |
+          cd aws-db
+          terraform apply -auto-approve 
+        displayName: 'Terraform Apply'
+        env: 
+          AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)  # Use variable from the library
+          AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)  # Use variable from the library
